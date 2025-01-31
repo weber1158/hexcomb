@@ -1,9 +1,14 @@
 function generateStatistics(s)
+ %Get path to statistics
+ p = which('HexComb');
+ p = p(1:end-13); % Removes HexComb.mlapp
+ p = [p 'private\'];
+
  %Import data
  opts = spreadsheetImportOptions("NumVariables",3);
  opts.VariableNames = ["Date","Game","Score"];
  opts.VariableTypes = ["datetime","double","double"];
- stats = readtable('hexCombStatistics.xlsx',opts);
+ stats = readtable([p 'hexCombStatistics.xlsx'],opts);
  date = stats.Date;
  game = stats.Game;
  
@@ -14,7 +19,7 @@ function generateStatistics(s)
    newScore = s;
    newStats = table(newDate,newGame,newScore,...
      'VariableNames',{'Date','Game','Score'});
-   writetable(newStats,'hexCombStatistics.xlsx');
+   writetable(newStats,[p 'hexCombStatistics.xlsx']);
    return
  else
    newDate = datetime("today");
@@ -24,7 +29,7 @@ function generateStatistics(s)
      'VariableNames',{'Date','Game','Score'});
    newStats = [stats;newStats];
    newStats = rmmissing(newStats);
-   writetable(newStats,'hexCombStatistics.xlsx');
+   writetable(newStats,[p 'hexCombStatistics.xlsx']);
  end
 
 end
